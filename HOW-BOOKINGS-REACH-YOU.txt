@@ -1,0 +1,131 @@
+# 📬 Pomaje Resort — How Booking Data Reaches You
+=====================================================
+
+When a visitor fills the booking form on your website, their data is
+delivered to you through **two channels**:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ✅ METHOD 1 — WhatsApp (Works Immediately, Zero Setup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After submitting the form, a popup appears with a green
+**"Send via WhatsApp to Resort"** button.
+
+When the visitor taps it, WhatsApp opens on their phone with ALL
+booking details pre-filled as a message — sent directly to:
+
+   📱 +91 9359118151
+
+**The message will look like:**
+
+   🌿 New Booking Request — Pomaje Resort
+   ━━━━━━━━━━━━━━━━━━━━
+   Full Name: Rajesh Patil
+   Phone Number: 9876543210
+   Visit Date: 2025-12-25
+   Number of Guests: 4
+   Package: Family Package – ₹1,299
+   Special Occasion: Birthday
+   Special Requests: Decoration please
+   ━━━━━━━━━━━━━━━━━━━━
+   📅 Received: 15/12/2025, 3:45:22 pm
+
+NO setup needed for this method. It works right now! ✅
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ✅ METHOD 2 — Email to Your Inbox (Free Setup — 5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This sends booking data directly to your email inbox automatically,
+without the visitor needing to press anything extra.
+
+### STEP 1 — Create a free EmailJS account
+   → Go to: https://www.emailjs.com
+   → Sign Up (free plan allows 200 emails/month)
+
+### STEP 2 — Add Email Service
+   → Dashboard → Email Services → Add New Service
+   → Choose Gmail (or any email)
+   → Connect your Gmail account (e.g. pomajeresort@gmail.com)
+   → Note the SERVICE ID shown (e.g. service_abc123)
+
+### STEP 3 — Create Email Template
+   → Dashboard → Email Templates → Create New Template
+   → Set "To Email": your resort email
+   → Set "Subject": New Booking from {{from_name}}
+   → In the body, paste this:
+
+   ----------------------------------------
+   New Booking — Pomaje Resort
+   
+   Name:     {{from_name}}
+   Phone:    {{phone}}
+   Date:     {{visit_date}}
+   Guests:   {{guests}}
+   Package:  {{package}}
+   Occasion: {{occasion}}
+   Message:  {{message}}
+   Time:     {{booking_time}}
+   ----------------------------------------
+
+   → Save → Note the TEMPLATE ID (e.g. template_xyz789)
+
+### STEP 4 — Get Your Public Key
+   → Dashboard → Account → General → Public Key
+   → Copy it (e.g. aBcDeFgHiJkLmN)
+
+### STEP 5 — Add Keys to the Website
+   Open js/main.js and find these 3 lines near the top:
+
+      const EMAILJS_SERVICE  = 'YOUR_SERVICE_ID';
+      const EMAILJS_TEMPLATE = 'YOUR_TEMPLATE_ID';
+      const EMAILJS_PUBLIC   = 'YOUR_PUBLIC_KEY';
+
+   Also open index.html, find:
+      emailjs.init({ publicKey: 'YOUR_PUBLIC_KEY' });
+
+   Replace with your actual values. Example:
+      const EMAILJS_SERVICE  = 'service_abc123';
+      const EMAILJS_TEMPLATE = 'template_xyz789';
+      const EMAILJS_PUBLIC   = 'aBcDeFgHiJkLmN';
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 📊 METHOD 3 — Google Sheets (Advanced, Optional)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Want all bookings saved in a Google Sheet automatically?
+Use Google Apps Script as a free backend:
+
+1. Create a Google Sheet with columns:
+   Timestamp | Name | Phone | Date | Guests | Package | Occasion | Message
+
+2. In the Sheet: Extensions → Apps Script → paste this:
+
+   function doPost(e) {
+     const sheet = SpreadsheetApp.getActiveSheet();
+     const d = JSON.parse(e.postData.contents);
+     sheet.appendRow([
+       new Date(), d.name, d.phone, d.date,
+       d.guests, d.package, d.occasion, d.message
+     ]);
+     return ContentService.createTextOutput('OK');
+   }
+
+3. Deploy → New Deployment → Web App → Anyone can access
+4. Copy the Web App URL and add to js/main.js as:
+   const SHEETS_URL = 'https://script.google.com/...';
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD          | SETUP NEEDED | DATA GOES TO
+----------------|--------------|------------------------
+WhatsApp        | None (ready) | Your WhatsApp instantly
+EmailJS Email   | 5 minutes    | Your email inbox
+Google Sheets   | 15 minutes   | Google Spreadsheet
+
+For a small resort, WhatsApp alone is usually enough.
+Add EmailJS for a professional email record too.
